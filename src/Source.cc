@@ -336,7 +336,8 @@ double Source::dis (int l)//////// return the distance between source and destin
             }
         }
     }
-}}
+}
+}
 
 double Source:: ethac (int h,int i ,double rh[])/////return rh
 {
@@ -378,7 +379,7 @@ double sump;
             sump=sump+(ailp[i][l]*csll[l]*sumx);
            // }
         }
-  //  }
+
 
   //  for(int i0=0;i0<N;i0++){
         double summ;
@@ -615,7 +616,6 @@ void Source::handleMessage(cMessage *msg)
                 //  for (int id1=0;id1<N;id1++){
                      // ev<<"id1++"<<endl;
                ccsl();
-               fwl();
                fuhi(id);//calculate uhi
                fvh(id);//calculate vh
                flamda(id);//calculate lambda
