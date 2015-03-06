@@ -35,6 +35,7 @@ class Source : public cSimpleModule
 int count;
 int k;
  virtual void fwl();
+ virtual void calculSink();
 /*double sumf;
 double sxhl;
 double sqi;
@@ -42,7 +43,7 @@ double spsh;
 double srh;
 double old;
 double fabst;*/
-
+double fabst;
 
   protected:
      virtual double ethac (int h,int i ,double rh[]);

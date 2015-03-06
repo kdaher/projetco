@@ -39,9 +39,13 @@ msg->setKind(0);
 }
 
 void Sink::handleMessage(cMessage *msg)
-{//count=0;
+{
+    int o1= gateSize("out");
+    cMessage *keep= new cMessage("keep_data");
+    keep->setKind(1);
     Source *src=new Source();
     src->fwl();
+    src->calculSink();
     cMessage *ack = new cMessage("iteration");
     ack->setKind(0);
     simtime_t d = simTime() - lastArrival;
@@ -52,27 +56,18 @@ void Sink::handleMessage(cMessage *msg)
     arrivalsVector.record(1);
 
     lastArrival = simTime();
-   // void Source::fwl();
-  //  void Source::
-   /* int kd= msg->getKind();
-        if (kd == 1){
-                                        count++;
-                          }
+    ev<<"la difference est"<<src->fabst<<endl;
+    if (src->fabst>0){
+        ev<<"Incremente les iterations"<<endl;
+        for(int i=0;i<o1;i++){
+            send(ack->dup(),"out",i);
+              }
+                }
 
-                          ev<<"test count"<<endl;
-                          ev<<"count="<<count<<endl;
-
-
-                          if (count==gateSize("in")){
-
-                              for(int i=0;i<gateSize("out");i++){
-                              send(ack->dup(),"out",i);}
-                              count=0;
-                          }*/
-    for(int i=0;i<gateSize("out");i++){
-                                 send(ack->dup(),"out",i);}
-
-
+    else{
+        ev<<"arrete les iterations, envoie keep_iteration "<<endl;
+        endSimulation ();
+                }
 
 }
 

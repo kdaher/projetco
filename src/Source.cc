@@ -38,7 +38,7 @@ namespace projetco {
   int k=0;
   int id;
   int link=22;
-  double qi[10];
+  double qi[10]={0.15982,0.16098,0.18345,0.17314,0.1692,0.15823,0.15215,0.16234,0.19233,0.17234};
   double csll[22],alpha,beta,sum1l,sum1h,sum2l,sum2h,lamdac,sumi,div,vhc,etha,mu,sumax,cr,bi,sigma2,np,gamma,deltap,deltar,deltax;
   int Dh;
   double sumqi,lamdaa,wlll,uhii,vhh,epsilon;
@@ -47,7 +47,6 @@ namespace projetco {
   double w;
   double dl[10][10];
   double xhl[10][22];
-
   double  ps[10]={0.364644,
 		  0.377853,
 		  0.414557,
@@ -115,9 +114,9 @@ namespace projetco {
   int h=1;
   double cccsl = 0;
 
-
   void Source::initialize()
   {
+
     k=0;
     alpha=0.5;
     beta=1.3E-8;
@@ -134,6 +133,12 @@ namespace projetco {
     deltax=0.2;
     epsilon=1e-10;
     count=0;
+    for(int h=0;h<9;h++){
+        for(int l=0;l<link;l++){
+            xhl[h][l]=0;
+        }
+
+    }
     ifstream fichier("dl.txt", ios::in ); // ouverture in écriture avec effacement du fichier ouvert
 
     if(fichier){
@@ -195,8 +200,6 @@ namespace projetco {
     }
     ev<<"_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _"<<endl;
     ev<<"initialize"<<endl;
-
-    
 
     cMessage *msg = new cMessage("Iteration");
     msg->setKind(0);
@@ -274,14 +277,15 @@ namespace projetco {
 	sumq=sumq+ail[i][l]*qi[i];
       }
       wl[l]=wl[l]+(((double)w)/(sqrt(k)))*sumq;
+      ev<<l<<" : wl "<<wl[l]<<endl;
     }
-  }
+    }
 
 
   void Source::fvh (int h){  ///////////// function return vh
 
     double x=0;
-    double a= ((double)sigma2)/;
+    double a= ((double)sigma2)/Dh;
     div =  log(a) /(gamma*pow(ps[h],((double)2)/3));
     x=(((double)w)/sqrt(k))*(r[h]-div);
     vhc=vh[h]-x;
@@ -366,7 +370,7 @@ namespace projetco {
       }
       xht=(double)-sum/(2*deltax);
 
-      ev<<"xht"<<xht<<endl;
+     // ev<<"xht"<<xht<<endl;
 
       if(xht>0){
 	xhl[h][l]=xht;
@@ -375,13 +379,57 @@ namespace projetco {
 	xhl[h][l]=0;
       }
     }
-  }
+   }
+
+  void Source::calculSink(){
+
+            //double fabst;
+            double sqi=0;
+            double spsh=0;
+            double srh=0;
+            double sxhl=0;
+            double old=sumf;
+            sumf=0;
+            for(int i=0;i<N;i++){
+              ev<<"qi["<<i<<"]"<<qi[i]<<endl;
+                         }
+            for (int i=0;i<N;i++){
+
+            sqi=sqi+(qi[i]*qi[i]);
+
+            }
+
+            for (int i=0;i<N;i++){
+          for (int l=0;l<link;l++){
+            for (int h=0;h<V;h++){
+              sxhl=sxhl+(xhl[h][l]*xhl[h][l]);
+
+            }
+          }}
+
+            for (int h=0;h<V;h++){
+          srh=srh+(r[h]*r[h]);
+            }
+
+            for (int h=0;h<V;h++){
+          spsh=spsh+(pow(ps[h],0.6666666667));
+            }
+
+            ev<<"sqi"<<sqi<<endl;
+            ev<<"sxhl"<<sxhl<<endl;
+            ev<<"srh"<<srh<<endl;
+            sumf=sqi+deltax*sxhl+deltar*srh;
+            ev<<"old eq3= "<<old<<endl;
+            ev<<"new eq3= "<<sumf<<endl;
+            fabst=fabs((old-sumf));
+
+          }
+
 
   void Source::handleMessage(cMessage *msg)
   {
-    double fabst;
-    int o= gateSize("out");
     int o2= gateSize("out2");
+    int o= gateSize("out");
     ev<<"Handle message"<<endl;
     int in =gateSize("in");
     ev<<"in="<<in<<endl;
@@ -398,7 +446,7 @@ namespace projetco {
 
     ev<<"test count"<<endl;
     ev<<"count="<<count<<endl;
-    if (count>=0){
+    if (count==in){
       ev<<"count= in alors iter ++"<<endl;
       count=0;
       k++;
@@ -411,71 +459,9 @@ namespace projetco {
       fpsh(id);//calculate psh
       frh(id);//calculate rh
       fxhl(id);//calculate xhl
-
-      double sqi=0;
-      double spsh=0;
-      double srh=0;
-      double sxhl=0;
-      double old=sumf;
-      sumf=0;
-
-      for (int i=0;i<N;i++){
-
-	sqi=sqi+(qi[i]*qi[i]);
-
-      }
-
-      for (int i=0;i<N;i++){
-	for (int l=0;l<link;l++){
-	  for (int h=0;h<V;h++){
-	    sxhl=sxhl+(xhl[h][l]*xhl[h][l]);
-
-	  }
-	}}
-
-      for (int h=0;h<V;h++){
-	srh=srh+(r[h]*r[h]);
-      }
-
-      for (int h=0;h<V;h++){
-	spsh=spsh+(pow(ps[h],0.6666666667));
-      }
-
-      ev<<"sqi"<<sqi<<endl;
-      ev<<"sxhl"<<sxhl<<endl;
-      ev<<"srh"<<srh<<endl;
-      sumf=sqi+deltax*sxhl+deltar*srh;
-      ev<<"old eq3= "<<old<<endl;
-      ev<<"new eq3= "<<sumf<<endl;
-      fabst=fabs((old-sumf));
-      ev<<"la difference est"<<fabst<<endl;
-
-      if (fabst>0){
-	for(int i=0;i<N;i++){
-          ev<<"qi["<<i<<"]"<<qi[i]<<endl;
-	}
-
-	ev<<"Incremente les iterations"<<endl;
-	for(int i=0;i<o;i++){
-	  send(msg->dup(),"out",i);
-	}
-	for(int i=0;i<o2;i++){
-	  send(keep->dup(),"out2",i);
-	}
-      }
-
-      else{
-	ev<<"arrete les iterations, envoie keep_iteration "<<endl;
-	for(int i=0;i<o2;i++){
-	  send (keep->dup(),"out2",i);
-	}
-	for(int i=0;i<N;i++){
-	  ev<<"qi["<<i<<"]"<<qi[i]<<endl;
-	  ev<<"wl"<<wl[i]<<endl;
-	}
-	ev<<"iteration numero:"<<k<<endl;
-	endSimulation ();
-      }
+      for(int i=0;i<o;i++){
+                 send(msg->dup(),"out",i);
+               }
     }
     else{
       ev<<"attendre les autres noeuds pour envoyer ack"<<endl;
