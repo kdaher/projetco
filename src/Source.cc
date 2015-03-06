@@ -39,7 +39,7 @@ namespace projetco {
   int id;
   int link=22;
   double qi[10];
-  double csll[22],alpha,beta,sum1l,sum1h,sum2l,sum2h,lamdac,sumi,div,vhc,etha,mu,sumax,cr,bi,rf,sigma2,gamma,deltap,deltar,deltax;
+  double csll[22],alpha,beta,sum1l,sum1h,sum2l,sum2h,lamdac,sumi,div,vhc,etha,mu,sumax,cr,bi,sigma2,np,gamma,deltap,deltar,deltax;
   int Dh;
   double sumqi,lamdaa,wlll,uhii,vhh,epsilon;
   int  N;
@@ -118,6 +118,21 @@ namespace projetco {
 
   void Source::initialize()
   {
+    k=0;
+    alpha=0.5;
+    beta=1.3E-8;
+    sigma2=3500;
+    gamma=55.54;
+    np=4;
+    cr=0.5;
+    bi=5.0;
+    N=9;
+    w=0.15;
+    Dh=100;
+    deltap=0.2;
+    deltar=0.2;
+    deltax=0.2;
+    epsilon=1e-10;
     count=0;
     ifstream fichier("dl.txt", ios::in ); // ouverture in écriture avec effacement du fichier ouvert
 
@@ -158,8 +173,8 @@ namespace projetco {
       }
     }
     for(int l=0;l<link;l++){
-          csll[l]=alpha+beta*pow(dis(l),4); // 4: path loss exponent
-        }
+      csll[l]=alpha+beta*pow(dis(l),4); // 4: path loss exponent
+    }
 
     srand(time(NULL));
 
@@ -181,20 +196,7 @@ namespace projetco {
     ev<<"_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _"<<endl;
     ev<<"initialize"<<endl;
 
-    k=0;
-    alpha=0.5;
-    beta=1.3E-8;
-    sigma2=3500;
-    gamma=55.54;
-    cr=0.5;
-    bi=5.0;
-    N=9;
-    w=0.15;
-    Dh=100;
-    deltap=0.2;
-    deltar=0.2;
-    deltax=0.2;
-    epsilon=1e-10;
+    
 
     cMessage *msg = new cMessage("Iteration");
     msg->setKind(0);
@@ -236,7 +238,6 @@ namespace projetco {
   void Source::flamda (int i){// function return lambda
 
     double sump=0;
-
     for(int l=0;l<link;l++){
       double  sumx=0;
       for(int h=0;h<V;h++){
@@ -246,7 +247,6 @@ namespace projetco {
     }
 
     double summ=0;
-
     for(int l=0;l<link;l++){
       double  sumx=0;
       for(int h=0;h<V;h++){
@@ -281,8 +281,8 @@ namespace projetco {
   void Source::fvh (int h){  ///////////// function return vh
 
     double x=0;
-    double a= ((double)sigma2)/100;
-    div =  a /(gamma*pow(ps[h],((double)2)/3));
+    double a= ((double)sigma2)/;
+    div =  log(a) /(gamma*pow(ps[h],((double)2)/3));
     x=(((double)w)/sqrt(k))*(r[h]-div);
     vhc=vh[h]-x;
     if(vhc>0)
@@ -329,25 +329,24 @@ namespace projetco {
 
   }
 
-  void Source::fpsh (int id) ///////////// function return ps
+  void Source::fpsh (int h) ///////////// function return ps
   {
-    double a= -3*lamda[id];
+    double a= -3*lamda[h];
     double lo= ((double)sigma2)/Dh;
-    double b= sqrt((pow(3*lamda[id],2))+(((double)((64*deltap)))* lo * vh[id])/ gamma);
+    double b= sqrt((pow(3*lamda[h],2))+(((double)((64*deltap)))* log(lo) * vh[h])/ gamma);
     double c =a+b;
     double sump=((double)c)/(16*deltap);
     double sumph=pow(sump,0.6);
 
     if(sumph>epsilon)
-      ps[id]=sumph;
+      ps[h]=sumph;
     else
       {
-        ps[id]=epsilon;
+        ps[h]=epsilon;
       }
   }
 
   void Source::frh (int id){ ///////////// function return rh
-
     double resultatrh=((double)vh[id])/(2*deltar);
     if(resultatrh>0)
       r[id]=resultatrh;
