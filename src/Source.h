@@ -46,8 +46,7 @@ double fabst;*/
 
   protected:
      virtual double ethac (int h,int i ,double rh[]);
-     virtual void ccsl ();
-     virtual double wij (int isrc,int ides);
+     //virtual double wij (int isrc,int ides);
      virtual void flamda (int id);
      // virtual void fwl (int id,int rid);
 
