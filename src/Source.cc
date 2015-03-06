@@ -57,15 +57,15 @@ namespace projetco {
 		  0.387069};
 
   double lamda[10]={0.209763,
-            0.218569,
-            0.243038,
-            0.268853,
-            0.220553,
-            0.271589,
-            0.208977,
-            0.26945,
-            0.184731,
-            0.224713};
+		    0.218569,
+		    0.243038,
+		    0.268853,
+		    0.220553,
+		    0.271589,
+		    0.208977,
+		    0.26945,
+		    0.184731,
+		    0.224713};
 
   double wl[22]={0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
 
@@ -131,9 +131,9 @@ namespace projetco {
     epsilon=1e-10;
     count=0;
     for(int h=0;h<9;h++){
-        for(int l=0;l<link;l++){
-            xhl[h][l]=0;
-        }
+      for(int l=0;l<link;l++){
+	xhl[h][l]=0;
+      }
 
     }
     ifstream fichier("dl.txt", ios::in ); // ouverture in écriture avec effacement du fichier ouvert
@@ -276,7 +276,7 @@ namespace projetco {
       wl[l]=wl[l]+(((double)w)/(sqrt(k)))*sumq;
       ev<<l<<" : wl "<<wl[l]<<endl;
     }
-    }
+  }
 
 
   void Source::fvh (int h){  ///////////// function return vh
@@ -367,7 +367,7 @@ namespace projetco {
       }
       xht=(double)-sum/(2*deltax);
 
-     // ev<<"xht"<<xht<<endl;
+      // ev<<"xht"<<xht<<endl;
 
       if(xht>0){
 	xhl[h][l]=xht;
@@ -376,57 +376,54 @@ namespace projetco {
 	xhl[h][l]=0;
       }
     }
-   }
+  }
 
   void Source::calculSink(){
 
-            //double fabst;
-            double sqi=0;
-            double spsh=0;
-            double srh=0;
-            double sxhl=0;
-            double old=sumf;
-            sumf=0;
+    //double fabst;
+    double sqi=0;
+    double spsh=0;
+    double srh=0;
+    double sxhl=0;
+    double old=sumf;
+    sumf=0;
 
-            for(int i=0;i<N;i++){
-              ev<<"qi["<<i<<"]"<<qi[i]<<endl;
-            }
+    for(int i=0;i<N;i++){
+      ev<<"qi["<<i<<"]"<<qi[i]<<endl;
+    }
 
-            for(int i=0;i<N;i++){
-              ev<<"lamda i["<<i<<"]"<<lamda[i]<<endl;
-            }
+    for(int i=0;i<N;i++){
+      ev<<"lamda i["<<i<<"]"<<lamda[i]<<endl;
+    }
 
-            for (int i=0;i<N;i++){
+    for (int i=0;i<N;i++){
+      sqi=sqi+(qi[i]*qi[i]);
+    }
 
-            sqi=sqi+(qi[i]*qi[i]);
+    for (int i=0;i<N;i++){
+      for (int l=0;l<link;l++){
+	for (int h=0;h<V;h++){
+	  sxhl=sxhl+(xhl[h][l]*xhl[h][l]);
+	}
+      }
+    }
 
-            }
+    for (int h=0;h<V;h++){
+      srh=srh+(r[h]*r[h]);
+    }
 
-            for (int i=0;i<N;i++){
-          for (int l=0;l<link;l++){
-            for (int h=0;h<V;h++){
-              sxhl=sxhl+(xhl[h][l]*xhl[h][l]);
+    for (int h=0;h<V;h++){
+      spsh=spsh+(pow(ps[h],0.6666666667));
+    }
 
-            }
-          }}
-
-            for (int h=0;h<V;h++){
-          srh=srh+(r[h]*r[h]);
-            }
-
-            for (int h=0;h<V;h++){
-          spsh=spsh+(pow(ps[h],0.6666666667));
-            }
-
-            ev<<"sqi"<<sqi<<endl;
-            ev<<"sxhl"<<sxhl<<endl;
-            ev<<"srh"<<srh<<endl;
-            sumf=sqi+deltax*sxhl+deltar*srh;
-            ev<<"old eq3= "<<old<<endl;
-            ev<<"new eq3= "<<sumf<<endl;
-            fabst=fabs((old-sumf));
-
-          }
+    ev<<"sqi"<<sqi<<endl;
+    ev<<"sxhl"<<sxhl<<endl;
+    ev<<"srh"<<srh<<endl;
+    sumf=sqi+deltax*sxhl+deltar*srh;
+    ev<<"old eq3= "<<old<<endl;
+    ev<<"new eq3= "<<sumf<<endl;
+    fabst=fabs((old-sumf));
+  }
 
 
   void Source::handleMessage(cMessage *msg)
@@ -463,8 +460,8 @@ namespace projetco {
       frh(id);//calculate rh
       fxhl(id);//calculate xhl
       for(int i=0;i<o;i++){
-                 send(msg->dup(),"out",i);
-               }
+	send(msg->dup(),"out",i);
+      }
     }
     else{
       ev<<"attendre les autres noeuds pour envoyer ack"<<endl;
