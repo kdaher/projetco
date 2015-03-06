@@ -14,6 +14,7 @@
 // 
 
 #include "Source.h"
+#include "Sink.h"
 #include <time.h>
 #include <iostream>
 #include <string>
@@ -24,7 +25,6 @@ namespace projetco {
 
   Define_Module(Source);
   //Define_Module(Sink);
-
   Source::Source()
   {
     timerMessage = NULL;
@@ -34,8 +34,6 @@ namespace projetco {
   {
     cancelAndDelete(timerMessage);
   }
-
-  int k=0;
   int id;
   int link=22;
   double qi[10]={0.15982,0.16098,0.18345,0.17314,0.1692,0.15823,0.15215,0.16234,0.19233,0.17234};
@@ -59,15 +57,15 @@ namespace projetco {
 		  0.387069};
 
   double lamda[10]={0.209763,
-		    0.218569,
-		    0.243038,
-		    0.268853,
-		    0.220553,
-		    0.271589,
-		    0.208977,
-		    0.26945,
-		    0.184731,
-		    0.224713};
+            0.218569,
+            0.243038,
+            0.268853,
+            0.220553,
+            0.271589,
+            0.208977,
+            0.26945,
+            0.184731,
+            0.224713};
 
   double wl[22]={0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
 
@@ -116,7 +114,6 @@ namespace projetco {
 
   void Source::initialize()
   {
-
     k=0;
     alpha=0.5;
     beta=1.3E-8;
@@ -319,7 +316,7 @@ namespace projetco {
 
     }
     double sumqii=((double)(-(sumqi-lamda[id]*bi)))/2;
-    ev<<"lamda="<<lamda[id]<<endl;
+    //ev<<"lamda="<<lamda[id]<<endl;
 
     if(sumqii>epsilon)
       {
@@ -390,9 +387,15 @@ namespace projetco {
             double sxhl=0;
             double old=sumf;
             sumf=0;
+
             for(int i=0;i<N;i++){
               ev<<"qi["<<i<<"]"<<qi[i]<<endl;
-                         }
+            }
+
+            for(int i=0;i<N;i++){
+              ev<<"lamda i["<<i<<"]"<<lamda[i]<<endl;
+            }
+
             for (int i=0;i<N;i++){
 
             sqi=sqi+(qi[i]*qi[i]);

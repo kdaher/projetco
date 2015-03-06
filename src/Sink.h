@@ -24,7 +24,8 @@ namespace projetco {
  * Message sink; see NED file for more info.
  */
 class Sink : public cSimpleModule
-{
+{public:
+    int nb=0;
   private:
     // state
     simtime_t lastArrival;

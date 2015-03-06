@@ -23,6 +23,7 @@ Define_Module(Source);
 
 void Sink::initialize()
 {
+    nb=0;
 
     cMessage *msg = new cMessage("Iteration");
 msg->setKind(0);
@@ -59,9 +60,11 @@ void Sink::handleMessage(cMessage *msg)
     ev<<"la difference est"<<src->fabst<<endl;
     if (src->fabst>0){
         ev<<"Incremente les iterations"<<endl;
+        nb++;
         for(int i=0;i<o1;i++){
             send(ack->dup(),"out",i);
               }
+        ev<<"nbs iterations : "<<nb<<endl;
                 }
 
     else{

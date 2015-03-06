@@ -118,5 +118,6 @@ $O/Sink.o: Sink.cc \
 	Sink.h \
 	Source.h
 $O/Source.o: Source.cc \
+	Sink.h \
 	Source.h
 
