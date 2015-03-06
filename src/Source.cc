@@ -39,9 +39,14 @@ namespace projetco {
   int id;
   int link=22;
   double qi[10];
+<<<<<<< HEAD
   double csll[22],alpha,beta,sum1l,sum1h,sum2l,sum2h,lamdac,sumi,div,vhc,etha,mu,sumax,cr,bi,rf,sigma2,gamma,deltap,deltar,deltax;
   int Dh;
   double sumqi,lamdaa,wlll,uhii,vhh,epsilon;
+=======
+  double csll[22],alpha,beta,np,sum1l,sum1h,sum2l,sum2h,lamdac,sumi,div,vhc,etha,mu,sumax,cr,bi,rf,sigma2,gamma;
+  double sumqi,lamdaa,wlll,uhii,vhh;
+>>>>>>> origin/master
   int  N;
   double sumf;
   double w;
@@ -113,6 +118,10 @@ namespace projetco {
   double ailm[10][22];
   int V=9;
   int h=1;
+<<<<<<< HEAD
+=======
+  double epsilon=1e-10;
+>>>>>>> origin/master
   double cccsl = 0;
 
 
@@ -157,9 +166,12 @@ namespace projetco {
 	}
       }
     }
+<<<<<<< HEAD
     for(int l=0;l<link;l++){
           csll[l]=alpha+beta*pow(dis(l),4); // 4: path loss exponent
         }
+=======
+>>>>>>> origin/master
 
     srand(time(NULL));
 
@@ -174,6 +186,7 @@ namespace projetco {
       ev<<"uhi["<<idi<<"]["<<i<<"] ="<<uhi[idi][i]<<endl;
     }
     ev<<"_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _"<<endl;
+<<<<<<< HEAD
 
     for(int i=0;i<10;i++){
       ev<<"dl["<<idi<<"]["<<i<<"] ="<<dl[idi][i]<<endl;
@@ -210,6 +223,41 @@ namespace projetco {
   double Source::dis (int l)//////// return the distance between source and destination
   {
     for(int i=0;i<10;i++){
+=======
+
+    for(int i=0;i<10;i++){
+      ev<<"dl["<<idi<<"]["<<i<<"] ="<<dl[idi][i]<<endl;
+    }
+    ev<<"_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _"<<endl;
+    ev<<"initialize"<<endl;
+
+    k=0;
+    alpha=0.5;
+    beta=1.3E-8;
+    np=4;
+    sigma2=3500;
+    gamma=55.54;
+    cr=0.5;
+    bi=5.0;
+    rf=0.2;
+    N=9;
+    w=0.15;
+
+    cMessage *msg = new cMessage("Iteration");
+    msg->setKind(0);
+
+    int out =gateSize("out");
+    ev<<"out="<<out<<endl;
+
+    for(int i=0;i<out;i++){
+      send (msg->dup(),"out",i);
+    }
+  }
+
+  double Source::dis (int l)//////// return the distance between source and destination
+  {
+    for(int i=0;i<10;i++){
+>>>>>>> origin/master
       if(ail[i][l]==1){
 	for(int j=0;j<10;j++){
 	  if(ail[j][l]==-1){
@@ -232,6 +280,7 @@ namespace projetco {
     return ret ;
   }
 
+<<<<<<< HEAD
 
   void Source::flamda (int i){// function return lambda
 
@@ -239,16 +288,39 @@ namespace projetco {
 
     for(int l=0;l<link;l++){
       double  sumx=0;
+=======
+  void Source::ccsl ()/////return csl
+  {
+    for(int l=0;l<link;l++){
+      csll[l]=alpha+beta*pow(dis(l),np);
+    }
+  }
+
+  void Source::flamda (int i){// function return lambda
+
+    double sump;
+
+    for(int l=0;l<link;l++){
+      double  sumx=0;
+      sump=0;
+>>>>>>> origin/master
       for(int h=0;h<V;h++){
 	sumx=sumx+xhl[h][l];
       }
       sump=sump+(ailp[i][l]*csll[l]*sumx);
     }
 
+<<<<<<< HEAD
     double summ=0;
 
     for(int l=0;l<link;l++){
       double  sumx=0;
+=======
+    double summ;
+    for(int l=0;l<link;l++){
+      double  sumx=0;
+      summ=0;
+>>>>>>> origin/master
       for(int h=0;h<V;h++){
 	sumx=sumx+xhl[h][l];
       }
@@ -294,7 +366,11 @@ namespace projetco {
 
   void Source::fuhi (int i) ///////////// function return u hi
   {
+<<<<<<< HEAD
     double calc;
+=======
+    double tempo, calc;
+>>>>>>> origin/master
     for(int h=0;h<V;h++){
       double sumqi = 0;
       for(int l=0;l<link;l++){
@@ -302,15 +378,27 @@ namespace projetco {
       }
       calc= ethac (h,i ,r);
       uhi[h][i]=uhi[h][i]-((((double)w)/(sqrt(k)))*(calc-sumqi));
+<<<<<<< HEAD
+=======
+      tempo=((((double)w)/(sqrt(k)))*(calc-sumqi));
+>>>>>>> origin/master
     }
   }
 
   void Source::fqi (int id) ///////////// function return qi
   {
+<<<<<<< HEAD
+=======
+    bi=5.0;
+>>>>>>> origin/master
     double sumqi=0;
 
     for(int l=0;l<link;l++){
       double  wll= wl[l];
+<<<<<<< HEAD
+=======
+      test=ail[id][l]*wll;
+>>>>>>> origin/master
       sumqi=sumqi+ail[id][l]*wll;
 
     }
@@ -331,12 +419,20 @@ namespace projetco {
 
   void Source::fpsh (int id) ///////////// function return ps
   {
+<<<<<<< HEAD
     double a= -3*lamda[id];
     double lo= ((double)sigma2)/Dh;
     double b= sqrt((pow(3*lamda[id],2))+(((double)((64*deltap)))* lo * vh[id])/ gamma);
     double c =a+b;
     double sump=((double)c)/(16*deltap);
     double sumph=pow(sump,0.6);
+=======
+    double deltap=0.2;
+    double gamma=55.54;
+    double a=3*lamda[id]*gamma;
+    double sump=  ((double)a)/2*(log(((double)sigma2)/100))*vh[id];
+    double sumph=pow(sump,-0.6);
+>>>>>>> origin/master
 
     if(sumph>epsilon)
       ps[id]=sumph;
@@ -380,6 +476,12 @@ namespace projetco {
 
   void Source::handleMessage(cMessage *msg)
   {
+<<<<<<< HEAD
+=======
+    double deltax =0.2;
+    double deltar =0.2;
+    double deltap =0.2;
+>>>>>>> origin/master
     double fabst;
     int o= gateSize("out");
     int o2= gateSize("out2");
@@ -404,6 +506,10 @@ namespace projetco {
       count=0;
       k++;
       ev<<"noeud numero:"<<id<<endl;
+<<<<<<< HEAD
+=======
+      ccsl();
+>>>>>>> origin/master
       fuhi(id);//calculate uhi
       fvh(id);//calculate vh
       flamda(id);//calculate lambda
