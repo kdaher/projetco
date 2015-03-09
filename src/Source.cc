@@ -35,16 +35,16 @@ namespace projetco {
     cancelAndDelete(timerMessage);
   }
   int id;
-  int link=22;
+  int link=30;
   double qi[10]={0.15982,0.16098,0.18345,0.17314,0.1692,0.15823,0.15215,0.16234,0.19233,0.17234};
-  double csll[22],alpha,beta,sum1l,sum1h,sum2l,sum2h,lamdac,sumi,div,vhc,etha,mu,sumax,cr,bi,sigma2,np,gamma,deltap,deltar,deltax;
+  double csll[30],alpha,beta,sum1l,sum1h,sum2l,sum2h,lamdac,sumi,div,vhc,etha,mu,sumax,cr,bi,sigma2,np,gamma,deltap,deltar,deltax;
   int Dh;
   double sumqi,lamdaa,wlll,uhii,vhh,epsilon;
   int  N;
   double sumf;
   double w;
   double dl[10][10];
-  double xhl[10][22];
+  double xhl[10][30];
   double  ps[10]={0.364644,
 		  0.377853,
 		  0.414557,
@@ -67,7 +67,7 @@ namespace projetco {
 		    0.184731,
 		    0.224713};
 
-  double wl[22]={0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+  double wl[30]={0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
 
   double  uhi[10][10]={
     0.209763, 0.218569, 0.243038, 0.268853, 0.220553, 0.271589, 0.208977, 0.26945, 0.184731, 0.224713,
@@ -105,9 +105,9 @@ namespace projetco {
 		0.142365,
 		0.162356};
 
-  double ail[10][22];
-  double ailp[10][22];
-  double ailm[10][22];
+  double ail[10][30];
+  double ailp[10][30];
+  double ailm[10][30];
   int V=9;
   int h=1;
   double cccsl = 0;
@@ -175,7 +175,7 @@ namespace projetco {
       }
     }
     for(int l=0;l<link;l++){
-      csll[l]=alpha+beta*pow(dis(l),4); // 4: path loss exponent
+      csll[l]=alpha+beta*pow(dis(l),np); // 4: path loss exponent
     }
 
     srand(time(NULL));
@@ -266,7 +266,7 @@ namespace projetco {
   }
 
 
-  void Source::fwl (){  // ///////////// function wl
+  void Source::fwl (int i){  // ///////////// function wl
 
     for(int l=0;l<link;l++){
       double sumq=0;
@@ -311,8 +311,8 @@ namespace projetco {
     double sumqi=0;
 
     for(int l=0;l<link;l++){
-      double  wll= wl[l];
-      sumqi=sumqi+ail[id][l]*wll;
+      //double  wll= wl[l];
+      sumqi=sumqi+ail[id][l]*wl[l];
 
     }
     double sumqii=((double)(-(sumqi-lamda[id]*bi)))/2;
@@ -452,7 +452,7 @@ namespace projetco {
       fuhi(id);//calculate uhi
       fvh(id);//calculate vh
       flamda(id);//calculate lambda
-      // fwl();//calculate wl
+      //fwl(id);//calculate wl
       fqi(id);//calculate qi
       fpsh(id);//calculate psh
       frh(id);//calculate rh

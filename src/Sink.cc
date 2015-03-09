@@ -40,12 +40,12 @@ msg->setKind(0);
 }
 
 void Sink::handleMessage(cMessage *msg)
-{
+{   int i=getIndex();
     int o1= gateSize("out");
     cMessage *keep= new cMessage("keep_data");
     keep->setKind(1);
     Source *src=new Source();
-    src->fwl();
+    src->fwl(i);
     src->calculSink();
     cMessage *ack = new cMessage("iteration");
     ack->setKind(0);

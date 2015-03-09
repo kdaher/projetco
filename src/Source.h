@@ -34,7 +34,8 @@ class Source : public cSimpleModule
      virtual ~Source();
 int count;
 int k;
- virtual void fwl();
+
+ virtual void fwl(int i);
  virtual void calculSink();
 /*double sumf;
 double sxhl;
