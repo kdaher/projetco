@@ -400,11 +400,9 @@ namespace projetco {
       sqi=sqi+(qi[i]*qi[i]);
     }
 
-    for (int i=0;i<N;i++){
-      for (int l=0;l<link;l++){
-	for (int h=0;h<V;h++){
-	  sxhl=sxhl+(xhl[h][l]*xhl[h][l]);
-	}
+    for (int l=0;l<link;l++){
+      for (int h=0;h<V;h++){
+	sxhl=sxhl+(xhl[h][l]*xhl[h][l]);
       }
     }
 
