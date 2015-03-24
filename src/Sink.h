@@ -25,7 +25,8 @@ namespace projetco {
  */
 class Sink : public cSimpleModule
 {public:
-    int nb=0;
+    int nb;
+    int count1;
   private:
     // state
     simtime_t lastArrival;
@@ -39,6 +40,7 @@ class Sink : public cSimpleModule
     virtual void initialize();
     virtual void handleMessage(cMessage *msg);
     virtual void finish();
+
 };
 
 }; // namespace

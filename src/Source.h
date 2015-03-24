@@ -34,9 +34,11 @@ class Source : public cSimpleModule
      virtual ~Source();
 int count;
 int k;
-
- virtual void fwl(int i);
+clock_t t1,t2;
+ virtual void fwl(int nb);
  virtual void calculSink();
+ virtual void afficherqi();
+ virtual void enregistrer(int iter);
 /*double sumf;
 double sxhl;
 double sqi;
@@ -51,18 +53,15 @@ double fabst;
      //virtual double wij (int isrc,int ides);
      virtual void flamda (int id);
      // virtual void fwl (int id,int rid);
-
      virtual void fvh (int id);
      virtual void fuhi (int id);
      virtual void fqi (int id);
      virtual void fpsh (int id);
      virtual void frh (int id);
      virtual void fxhl (int id);
-
-
      virtual double dis(int l);
-    virtual void initialize();
-    virtual void handleMessage(cMessage *msg);
+     virtual void initialize();
+     virtual void handleMessage(cMessage *msg);
 };
 
 }; // namespace

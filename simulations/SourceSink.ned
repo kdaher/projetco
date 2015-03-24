@@ -43,12 +43,16 @@ network SourceSink
         source[0].out2++ --> source[4].in2++;
          source[0].in2++ <-- source[1].out2++;
         source[0].out2++ --> sink[0].in2++;//sink
+        sink[0].out++ --> source[0].in++;
+        source[0].out++ --> sink[0].in++;
          source[1].in2++ <-- source[2].out2++;
         source[1].out2++ --> source[0].in2++;
          source[1].in2++ <-- source[7].out2++;
         source[1].out2++ --> source[4].in2++;
        //  source[1].in2++ <-- source[3].out2++;
         source[1].out2++ --> sink[0].in2++;//sink
+        sink[0].out++ --> source[1].in++;
+        source[1].out++ --> sink[0].in++;
        //  source[1].in2++ <-- source[4].out2++;
         //source[1].out2++ --> source[5].in2++;
         // source[1].in2++ <-- source[5].out2++;
@@ -67,6 +71,8 @@ network SourceSink
         //source[3].out2++ --> source[7].in2++;
        //  source[3].in2++ <-- source[7].out2++;
         source[4].out2++ --> sink[0].in2++;//sink
+        sink[0].out++ --> source[4].in++;
+        source[4].out++ --> sink[0].in++;
         source[4].in2++ <-- source[0].out2++;
         //source[4].out2++ --> source[8].in2++;
          source[4].in2++ <-- source[1].out2++;

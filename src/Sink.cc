@@ -23,8 +23,8 @@ Define_Module(Source);
 
 void Sink::initialize()
 {
+    count1=0;
     nb=0;
-
     cMessage *msg = new cMessage("Iteration");
 msg->setKind(0);
     // int out2=gateSize("out2");
@@ -40,37 +40,56 @@ msg->setKind(0);
 }
 
 void Sink::handleMessage(cMessage *msg)
-{   int i=getIndex();
+{
+    int in2 =gateSize("in");
+    int kd= msg->getKind();
+if (kd == 0){
+  count1++;
+}
+    cMessage *ack = new cMessage("iteration");
+    ack->setKind(0);
     int o1= gateSize("out");
     cMessage *keep= new cMessage("keep_data");
     keep->setKind(1);
     Source *src=new Source();
-    src->fwl(i);
+    if (count1==in2){
+        count1=0;
+    src->fwl(nb+1);
+    clock_t t1,t2;
+    t1=clock();
     src->calculSink();
-    cMessage *ack = new cMessage("iteration");
-    ack->setKind(0);
+    src->enregistrer(nb);
+    t2=clock();
     simtime_t d = simTime() - lastArrival;
-    EV << "Received " << msg->getName() << endl;
-    delete msg;
 
+    //EV << "Received " << msg->getName() << endl;
+    delete msg;
     iaTimeHistogram.collect(d);
     arrivalsVector.record(1);
 
     lastArrival = simTime();
-    ev<<"la difference est"<<src->fabst<<endl;
-    if (src->fabst>0){
-        ev<<"Incremente les iterations"<<endl;
-        nb++;
+    //ev<<"la difference est"<<src->fabst<<endl;
+    if (nb<4000 ){
+       // ev<<"Incremente les iterations"<<endl;
         for(int i=0;i<o1;i++){
             send(ack->dup(),"out",i);
+
               }
-        ev<<"nbs iterations : "<<nb<<endl;
+
+        //ev<<"nbs iterations : "<<nb<<endl;
                 }
 
     else{
+        ev<<d<<endl;
+        src->afficherqi();
         ev<<"arrete les iterations, envoie keep_iteration "<<endl;
+        ev<<"nbs iterations : "<<nb<<endl;
         endSimulation ();
                 }
+    nb++;}
+    else {for(int i=0;i<o1;i++){
+        send(ack->dup(),"out",i);
+          }}
 
 }
 
